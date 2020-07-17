@@ -1,0 +1,9 @@
+.auth {
+  @include col();
+  @include size(4);
+  @include shift(4);
+  text-align: center;
+  h2 {
+    margin-bottom: 1rem;
+  }
+}

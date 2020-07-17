@@ -1,0 +1,23 @@
+.popover {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 70%;
+  z-index: 1000;
+  max-width: 27.6rem;
+  padding: 0 1rem;
+  font-size: 1.4rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: .1rem solid $color-border;
+  border-radius: .6rem;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.2);
+  margin: auto;
+  white-space: nowrap;
+  &-right {
+    left: 105%;
+  }
+}
+
