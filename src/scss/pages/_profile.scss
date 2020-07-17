@@ -1,0 +1,10 @@
+.profile {
+  @include col();
+  @include size(8);
+  @include shift(2);
+  text-align: center;
+  margin-top: 5rem;
+  h2 {
+    margin-bottom: 1rem;
+  }
+}

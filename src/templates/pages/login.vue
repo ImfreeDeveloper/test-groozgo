@@ -3,7 +3,7 @@
     <div class="row">
       <div class="auth">
         <h2>Вход</h2>
-        <form @submit.prevent="submitHandler" class="form-signin">
+        <form @submit.prevent="submitHandler">
           <p class="wrp-field">
             <input
               type="text"
