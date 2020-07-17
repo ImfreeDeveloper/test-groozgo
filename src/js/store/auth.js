@@ -3,14 +3,14 @@ import Repository from '../repository/repository'
 export default {
   state: {
     token: localStorage.getItem('token') || '',
-    user: ''
+    user: JSON.parse(localStorage.getItem('user')) || ''
   },
   mutations: {
-    setToken (state, token) {
+    setAuth (state, { token, user }) {
       state.token = token
-    },
-    setUser (state, user) {
       state.user = user
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
     }
   },
   actions: {
@@ -21,9 +21,7 @@ export default {
         if (data.code === 200) {
           const token = `Bearer ${data.data.token}`
           const user = data.data.active_sys_company_user
-          localStorage.setItem('token', token)
-          commit('setToken', token)
-          commit('setUser', user)
+          commit('setAuth', { token, user })
         } else {
           throw data
         }
@@ -35,12 +33,13 @@ export default {
     },
     async logout ({ commit }) {
       localStorage.removeItem('token')
-      commit('setToken', '')
-      commit('setUser', '')
+      localStorage.removeItem('user')
+      commit('setAuth', { token: '', user: '' })
     }
   },
   getters: {
-    isAuthenticated: state => !!state.token
+    isAuthenticated: state => !!state.token,
+    user: state => !!state.user
   }
 
 }

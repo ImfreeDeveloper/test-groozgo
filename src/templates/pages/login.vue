@@ -92,7 +92,7 @@ export default {
   }
 }
 
-function getValidPhone(phone) {
+function getValidPhone (phone) {
   return phone.replace(/\D+/g, '').slice(1)
 }
 </script>

@@ -1,0 +1,27 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $color-base;
+  padding: 0 2rem;
+  .logo {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    img {
+      width: auto;
+      height: 5rem;
+    }
+  }
+  .logout {
+    color: $color-white;
+    opacity: .8;
+    cursor: pointer;
+    @include md-block() {
+      cursor: default;
+    }
+    &:hover {
+      text-decoration: underline;
+      opacity: 1;
+    }
+  }
+}

@@ -67,6 +67,15 @@ a, a:hover, a:focus, a:active {
 
 .content {
   flex: 1 0 auto;
+  &-with-sidebar {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.main-content {
+  width: 100%;
+  padding: 2.5rem 2rem 1rem 2rem;
 }
 
 .hidden {
