@@ -2,9 +2,8 @@
   display: flex;
   align-items: center;
   position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 70%;
+  bottom: .8rem;
+  min-height: 3.5rem;
   z-index: 1000;
   max-width: 27.6rem;
   padding: 0 1rem;
@@ -13,11 +12,30 @@
   background-clip: padding-box;
   border: .1rem solid $color-border;
   border-radius: .6rem;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.2);
+  box-shadow: .5rem .5rem rgba(102, 102, 102, 0.1);
   margin: auto;
   white-space: nowrap;
-  &-right {
-    left: 105%;
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-top: .1rem solid $color-border;
+    border-left: .1rem solid $color-border;
+    background-color: $color-white;
+  }
+  &.right {
+    left: calc(100% + 1.5rem);
+    &:after {
+      right: auto;
+      transform: translateX(-50%) rotate(-45deg);
+    }
   }
 }
 

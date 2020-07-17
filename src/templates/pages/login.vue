@@ -4,7 +4,7 @@
       <div class="auth">
         <h2>Вход</h2>
         <form @submit.prevent="submitHandler">
-          <p class="wrp-field">
+          <div class="wrp-field">
             <input
               type="text"
               placeholder="Номер телефона"
@@ -14,9 +14,9 @@
               @blur="validateField('phone')"
               :class="{'is-danger': $v.phone.$error}"
             />
-            <span class="popover popover-right" v-if="$v.phone.$error">Введите корректный номер телефона</span>
-          </p>
-          <p class="wrp-field">
+            <p class="popover right" v-if="$v.phone.$error">Введите корректный номер телефона</p>
+          </div>
+          <div class="wrp-field">
             <input
               type="password"
               placeholder="Пароль"
@@ -24,8 +24,8 @@
               @blur="validateField('password')"
               :class="{'is-danger': $v.password.$error}"
             />
-            <span class="popover popover-right" v-if="$v.password.$error">Введите пароль</span>
-          </p>
+            <p class="popover right" v-if="$v.password.$error">Введите пароль</p>
+          </div>
           <button class="btn btn-secondary" :disabled="showLoader">
             <span class="btn-loader" v-if="showLoader"></span>
             Войти
