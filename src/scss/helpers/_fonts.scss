@@ -1,3 +1,5 @@
 @include font-face('ubuntu', $font-path + '/ubuntu/Ubuntu-Regular', 300, normal, eot ttf woff);
+@include font-face('ubuntu', $font-path + '/ubuntu/Ubuntu-Medium', 500, normal, eot ttf woff);
 @include font-face('ubuntu', $font-path + '/ubuntu/Ubuntu-Bold', 700, normal, eot ttf woff);
-@include font-face('ubuntu', $font-path + '/ubuntu/Ubuntu-ExtraBold', 900, normal, eot ttf woff);
+
+@include font-face('fontello', $font-path + '/fontello/fontello', 300, normal, eot ttf woff);

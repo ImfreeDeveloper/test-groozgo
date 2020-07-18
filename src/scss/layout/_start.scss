@@ -23,11 +23,10 @@ html, body{
 }
 
 body {
-  background-color: $color-bg;
   min-width: 320px;
   position: relative;
   line-height: 1.5;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-family: "ubuntu", sans-serif;
   font-weight: 300;
   color: $color-text
@@ -67,15 +66,17 @@ a, a:hover, a:focus, a:active {
 
 .content {
   flex: 1 0 auto;
+  background-color: $color-bg;
   &-with-sidebar {
     display: flex;
     justify-content: space-between;
+    background-color: $color-white!important;
   }
 }
 
 .main-content {
   width: 100%;
-  padding: 2.5rem 2rem 1rem 2rem;
+  padding: 2.5rem 2rem 5rem 2rem;
 }
 
 .hidden {

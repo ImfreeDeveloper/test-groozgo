@@ -26,10 +26,15 @@
             />
             <p class="popover right" v-if="$v.password.$error">Введите пароль</p>
           </div>
-          <button class="btn btn-secondary" :disabled="showLoader">
-            <span class="btn-loader" v-if="showLoader"></span>
-            Войти
-          </button>
+          <div class="gorizontal">
+            <button class="btn btn-secondary" :disabled="showLoader">
+              <span class="btn-loader" v-if="showLoader"></span>
+              Войти
+            </button>
+            <a href="#" class="link-no-decorate">
+              <span>Забыли пароль?</span>
+            </a>
+          </div>
         </form>
       </div>
     </div>

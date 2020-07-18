@@ -7,3 +7,113 @@ h2 {
   flex-shrink: 0;
   background-color: #2b2b2b;
 }
+
+.page {
+  &-bar {
+    margin: -2.5rem -2rem 0 -2rem;
+    border-bottom: .1rem solid $color-border;
+  }
+  &-breadcrumb {
+    padding: 1.1rem;
+  }
+  &-title {
+    color: $color-secondary;
+    border-bottom: .1rem solid $color-border;
+    padding: .5rem 0;
+    margin-bottom: 1rem;
+    text-align: center;
+    p {
+      font-weight: 700;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.link-no-decorate {
+  width: 100%;
+  span {
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 1.3rem;
+    letter-spacing: .1rem;
+    position: relative;
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: -.3rem;
+      height: .1rem;
+      left: 0;
+      right: 0;
+      margin: auto;
+      border-bottom: .2rem dashed $color-border;
+      transition: all .3s ease;
+    }
+    &:hover {
+      &:after {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.gorizontal {
+  display: flex;
+  align-items: center;
+  > * {
+    flex: 1;
+    margin-left: 2rem;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.text-warning {
+  color: $color-danger;
+}
+
+.file {
+  &-wrap {
+    border-radius: .4rem;
+    background-color: cornsilk;
+    border: .1rem solid $color-border;
+    width: 24rem;
+    padding: 1rem;
+    margin-bottom: .5rem;
+  }
+  &-btns {
+    ul {
+      text-align: right;
+      line-height: 1;
+      li {
+        display: inline-block;
+        padding-left: .2rem;
+        &:first-child {
+          padding-left: 0;
+        }
+        p {
+          background-color: $color-white;
+          border: .1rem solid $color-border;
+          border-radius: .3rem;
+          width: 2.4rem;
+          height: 2.1rem;
+          cursor: pointer;
+          transition: all .3s ease;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.2rem;
+          &:hover {
+            background-color: $color-bg;
+          }
+          &.file-delete {
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+  }
+}
