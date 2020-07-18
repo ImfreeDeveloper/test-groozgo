@@ -1,4 +1,4 @@
-import Repository from '../repository/repository'
+import { fetchWithAuth } from '../repository/repository'
 
 export default {
   state: {
@@ -16,7 +16,7 @@ export default {
   actions: {
     async login ({ dispatch, commit }, payload) {
       try {
-        const dataAuth = await Repository.post('/login', payload)
+        const dataAuth = await fetchWithAuth('post', '/login', payload)
         const data = dataAuth.data
         if (data.code === 200) {
           const token = `Bearer ${data.data.token}`

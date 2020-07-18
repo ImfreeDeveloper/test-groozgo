@@ -74,11 +74,6 @@
   font-size: 1.6rem;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .auth {
   .btn {
     height: 5rem;
@@ -95,4 +90,32 @@
       margin-left: auto;
     }
   }
+}
+
+.file-attach {
+  position: relative;
+  input[type="file"] {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    @include md-block() {
+      cursor: default;
+    }
+  }
+  @include md-block() {
+    cursor: default;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
