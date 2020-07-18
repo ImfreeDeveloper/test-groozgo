@@ -29,20 +29,26 @@
               <p class="text-warning" v-if="$v.countCars.$error">Необходимо заполнить «Общее количество машин в собственности».</p>
             </div>
             <div class="wrp-field">
-              <label>Почтовый адрес</label>
+              <label :class="{'text-warning': $v.postAddress.$error }">Почтовый адрес</label>
               <input
                   type="text"
                   placeholder="Почтовый адрес"
+                  v-model="postAddress"
+                  @blur="validateField('postAddress')"
+                  :class="{'is-danger': $v.postAddress.$error}"
               />
-              <p class="text-warning">Необходимо заполнить «Почтовый адрес».</p>
+              <p class="text-warning" v-if="$v.postAddress.$error">Необходимо заполнить «Почтовый адрес».</p>
             </div>
             <div class="wrp-field">
-              <label>Сайт компании</label>
+              <label :class="{'text-warning': $v.site.$error }">Сайт компании</label>
               <input
                   type="text"
                   placeholder="Сайт компании"
+                  v-model="site"
+                  @blur="validateField('site')"
+                  :class="{'is-danger': $v.site.$error}"
               />
-              <p class="text-warning">Значение «Сайт компании» не является правильным URL.</p>
+              <p class="text-warning" v-if="$v.site.$error">Значение «Сайт компании» не является правильным URL.</p>
             </div>
             <div class="wrp-field">
               <label :class="{'text-warning': $v.bik.$error }">БИК</label>
@@ -100,13 +106,16 @@
               />
             </div>
             <div class="wrp-field">
-              <label>Номер банковского счета</label>
+              <label :class="{'text-warning': $v.bankAccount.$error }">Номер банковского счета</label>
               <input
                   type="text"
+                  v-model="bankAccount"
+                  @blur="validateField('bankAccount')"
+                  :class="{'is-danger': $v.bankAccount.$error}"
                   placeholder="Номер банковского счета"
+                  v-mask="'####################'"
               />
-              <p class="text-warning">Неккоректный номер счета</p>
-              <p class="text-warning">Значение «Номер банковского счета» должно содержать минимум 20 символов.</p>
+              <p class="text-warning" v-if="$v.bankAccount.$error">Значение «Номер банковского счета» должно содержать минимум 20 символов.</p>
             </div>
             <div class="wrp-field">
               <label>Соглашение об электронном взаимодействии</label>
@@ -189,8 +198,11 @@ export default {
       countCars: '',
       dataOptionsBik: [],
       bik: {},
+      site: '',
       nameBank: '',
+      bankAccount: '',
       correspondentAccount: '',
+      postAddress: '',
       endpoint: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank'
     }
   },
@@ -202,6 +214,16 @@ export default {
   },
   validations: {
     bik: {
+      required
+    },
+    bankAccount: {
+      required,
+      minLength: minLength(20)
+    },
+    site: {
+      required
+    },
+    postAddress: {
       required
     },
     countCars: {
@@ -299,7 +321,14 @@ export default {
       this.countCars = this.profile.count_trucks
       this.nameBank = this.profile.bank_title
       this.correspondentAccount = this.profile.corr_account
-      this.bik['value'] = this.profile.bik
+      this.postAddress = this.profile.post_address
+      this.site = this.profile.site
+      this.bik = {
+        data: {
+          bic: this.profile.bik
+        },
+        value: this.profile.bank_title
+      }
       // this.bik['value'] = this.profile.bank_account
       // this.countCars = this.profile.post_address
     }
