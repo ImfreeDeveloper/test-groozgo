@@ -125,20 +125,20 @@
                     <p class="file-name">{{ attachment.name }}</p>
                     <div class="file-btns">
                       <ul>
+<!--                        <li v-if="!!attachment.id">-->
+<!--                          <a :href="attachment.link" download="attachment" class="file-download">-->
+<!--                            <i class="icon-download-alt"></i>-->
+<!--                          </a>-->
+<!--                        </li>-->
                         <li v-if="!!attachment.id">
-                          <p class="file-download">
-                            <i class="icon-download-alt"></i>
-                          </p>
-                        </li>
-                        <li v-if="!!attachment.id">
-                          <p class="file-view">
+                          <a :href="attachment.link" class="file-view" target="_blank">
                             <i class="icon-search"></i>
-                          </p>
+                          </a>
                         </li>
                         <li>
-                          <p class="file-delete" @click="deleteAttach(idx)">
+                          <a href="#" class="file-delete" @click="deleteAttach(idx)">
                             <i class="icon-trash-empty"></i>
-                          </p>
+                          </a>
                         </li>
                       </ul>
                     </div>
@@ -186,7 +186,7 @@
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
 import multiselect from 'vue-multiselect'
-import { fetchBik } from '../../js/repository/repository'
+import {fetchBik, fetchWithAuth} from '../../js/repository/repository'
 
 export default {
   components: {
@@ -217,7 +217,6 @@ export default {
       required
     },
     bankAccount: {
-      required,
       minLength: minLength(20)
     },
     site: {
@@ -245,11 +244,35 @@ export default {
         this.dataOptionsBik = bikBanks.data.suggestions
       }
     },
-    submitHandler () {
-      let formData = {
-        bik: this.bik
+    async submitHandler () {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        let formData = {
+          count_trucks: this.countCars,
+          post_address: this.postAddress,
+          bik: this.bik.data.bic,
+          bank_title: this.nameBank,
+          corr_account: this.correspondentAccount,
+          bank_account: this.bankAccount,
+          site: this.site,
+          edo_contracts: getDataBinary(this.attachments)
+        }
+
+        console.log(formData)
+
+        try {
+          const dataProfile = await fetchWithAuth('post', '/company-profile', formData)
+          console.log(dataProfile)
+          // const data = dataProfile.data
+          // if (data.code === 200) {
+          //   commit('setProfile', data.data)
+          // } else {
+          //   throw data
+          // }
+        } catch (e) {
+          throw e
+        }
       }
-      console.log(formData)
     },
     selectedBik (value) {
       this.nameBank = value.data.name.payment
@@ -276,15 +299,15 @@ export default {
         this.showLoader = false
         return false
       }
-      // let data = new FormData()
-      // data.append('attachment', file)
-
-      console.log(file)
 
       this.attachments.push({
         id: null,
-        name: limitString(file.name, 27),
-        link: file.name
+        name: 'Новый документ',
+        link: file.name,
+        new: {
+          is: true,
+          file
+        }
       })
 
       // try {
@@ -329,6 +352,10 @@ export default {
         },
         value: this.profile.bank_title
       }
+      this.attachments = this.profile.edo_contracts.map((attach, idx) => {
+        return { ...attach, name: `Scan Edo #${idx + 1}`, new: { is: false } }
+      })
+
       // this.bik['value'] = this.profile.bank_account
       // this.countCars = this.profile.post_address
     }
@@ -351,8 +378,20 @@ function validSize (obj) {
   return !((osize > 2 * 1024 * 1024))
 }
 
-function limitString (name, limit) {
-  return name.length <= limit ? name : name.substr(0, limit - 3) + '...'
+function getDataBinary (attachments) {
+  let formDataArr = []
+  let arrFiles = attachments.map(attach => {
+    return attach.new.is ? attach.new.file : null
+  }).filter(Boolean)
+  if (arrFiles.length) {
+    arrFiles.forEach(fl => {
+      let formData = new FormData()
+      formData.append(fl.name, fl)
+      formDataArr.push(formData)
+    })
+  }
+
+  return formDataArr
 }
 
 </script>
