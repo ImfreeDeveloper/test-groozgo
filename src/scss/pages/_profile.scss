@@ -1,8 +1,14 @@
 .profile {
   @include col();
   @include size(8);
+  @include size-sm(12);
   @include shift(2);
+  @include shift-sm(0);
   margin-top: 5rem;
+  position: relative;
+  @include md-block() {
+    margin-top: 2rem;
+  }
   &-inn {
     margin-bottom: 2rem;
     span {

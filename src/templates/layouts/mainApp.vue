@@ -1,6 +1,9 @@
 <template>
   <div class="wrapper">
     <header>
+      <hamburger
+        @handlerOpen="open"
+      />
       <div class="logo">
         <img src="/images/logo_theme_dark.png" alt="logo" />
       </div>
@@ -10,7 +13,7 @@
       >Выйти</p>
     </header>
     <main class="content content-with-sidebar">
-      <div class="sidebar"></div>
+      <div class="sidebar" :class="{'open': isOpen}"></div>
       <div class="main-content">
         <slot />
       </div>
@@ -22,11 +25,24 @@
 </template>
 
 <script>
+import hamburger from '../../components/hamburger.vue'
+
 export default {
+  components: {
+    hamburger
+  },
+  data () {
+    return {
+      isOpen: false
+    }
+  },
   methods: {
     logout () {
       this.$store.dispatch('logout')
       this.$router.push('/login')
+    },
+    open (val) {
+      this.isOpen = val
     }
   }
 }

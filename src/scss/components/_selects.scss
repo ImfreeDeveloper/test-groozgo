@@ -1,98 +1,37 @@
-.multiselect {
-  height: 3.5rem;
-  &__element {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    border-bottom: .1rem solid $color-border;
-    &:hover {
-      cursor: pointer;
-      background-color: $color-border;
-
-      @include md-block() {
-        cursor: default;
-      }
-    }
-    .option {
-      &__title {
-        display: block;
-        font-size: 1.3rem;
-      }
-      &__small {
-        display: block;
-        font-size: 1.5rem;
-        color: $color-base;
-      }
-    }
-  }
-  &__option {
-    display: block;
-    padding: 1.1rem 1.5rem;
-    font-size: 1.4rem;
-    //font-size: 1.4rem;
-    //color: $color-grey;
-    &--highlight {
-      background-color: $color-border;
-    }
-  }
-  &__single {
-    margin: 0 1rem;
-    z-index: 1;
-    background-color: $color-white;
-    line-height: 1;
-    @include sm-block() {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      font-size: 1.4rem;
-    }
-  }
-  &__tags {
-    height: 100%;
+.autocomplete-result-list {
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, .12);
+  padding: 0;
+  box-sizing: border-box;
+  max-height: 296px;
+  overflow-y: auto;
+  background: #fff;
+  list-style: none;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, .16)
+}
+.autocomplete-result {
+  cursor: default;
+  padding: .5rem 1rem;
+  .descr {
     display: flex;
-    align-items: center;
-    @include sm-block() {
-      height: 4rem;
-      position: relative;
-    }
-    input {
-      padding: 0 1rem !important;
-      width: 100% !important;
-      @include sm-block() {
-        padding: 1.05rem 1rem!important;
-        height: auto !important;
+    opacity: .7;
+    > * {
+      &:last-child {
+        margin-left: 1rem;
       }
     }
   }
-  &__content {
-    width: 100%;
-    &-wrapper {
-      background-color: $color-white;
-      position: absolute;
-      overflow: auto;
-      left: 0;
-      right: 0;
-      top: 6rem;
-      z-index: 20;
-      border-radius: .4rem;
-      border: .1rem solid $color-border;
-      @include sm-block() {
-        top: 6.8rem;
-      }
-      &[data-scrollbar] {
-        position: absolute;
-      }
-    }
-    > span {
-      padding-top: 1rem;
-      padding-left: 1.5rem;
-      font-size: 1.2rem;
-      opacity: .6;
-    }
+}
+
+.autocomplete-result:hover, .autocomplete-result[aria-selected=true] {
+  background-color: rgba(0, 0, 0, .06)
+}
+
+@keyframes rotate {
+  0% {
+    transform: translateY(-50%) rotate(0deg)
   }
-  &.is-danger {
-    .multiselect__input {
-      border: .1rem solid $color-danger;
-    }
+  to {
+    transform: translateY(-50%) rotate(359deg)
   }
 }

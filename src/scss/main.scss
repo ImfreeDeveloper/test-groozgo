@@ -2,12 +2,15 @@
 @import "helpers/variables";
 @import "helpers/mixins";
 @import "helpers/fonts";
+// theme
+@import "themes/themeOne";
 // layout
 @import "layout/smartgrid";
 @import "layout/start";
 @import "layout/common";
 @import "layout/footer";
 @import "layout/header";
+@import "layout/sidebar";
 // components
 @import "components/forms";
 @import "components/buttons";
@@ -16,6 +19,8 @@
 @import "components/svg";
 @import "components/popover";
 @import "components/icons";
+@import "components/loader";
+@import "components/hamburger";
 // pages
 @import "pages/index";
 @import "pages/auth";

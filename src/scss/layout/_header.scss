@@ -4,12 +4,29 @@ header {
   align-items: center;
   background-color: $color-base;
   padding: 0 2rem;
+  position: relative;
+  @include md-block() {
+    height: 5rem;
+  }
   .logo {
     padding-top: 2rem;
     padding-bottom: 2rem;
+
+    @include md-block() {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      text-align: center;
+    }
     img {
       width: auto;
       height: 5rem;
+      @include md-block() {
+        height: 3rem;
+      }
     }
   }
   .logout {
@@ -18,6 +35,7 @@ header {
     cursor: pointer;
     @include md-block() {
       cursor: default;
+      margin-left: auto;
     }
     &:hover {
       text-decoration: underline;

@@ -1,0 +1,33 @@
+.wrap-loader {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: fade_out($color-base, .5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 100;
+}
+
+.nb-spinner {
+  position: relative;
+  width: 7.5rem;
+  height: 7.5rem;
+  margin: auto;
+  background: transparent;
+  border-top: .4rem solid $color-secondary;
+  border-right: .4rem solid transparent;
+  border-radius: 50%;
+  animation: 1s spin linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -3,6 +3,10 @@
     <div class="row">
       <div class="auth">
         <h2>Вход</h2>
+        <div class="wrap-errors" v-for="(errors, idx) in errorsAuth" :key="idx">
+          <p class="text-warning" v-for="(error, idx) in errors" :key="idx">{{error}}</p>
+        </div>
+
         <form @submit.prevent="submitHandler">
           <div class="wrp-field">
             <input
@@ -49,7 +53,8 @@ export default {
     return {
       phone: '',
       password: '',
-      showLoader: false
+      showLoader: false,
+      errorsAuth: null
     }
   },
   validations: {
@@ -59,7 +64,7 @@ export default {
     },
     password: {
       required,
-      minLength: minLength(8)
+      minLength: minLength(2)
     }
   },
   methods: {
@@ -81,9 +86,11 @@ export default {
           await this.$store.dispatch('login', formData)
           setTimeout(() => {
             this.showLoader = false
+            this.errorsAuth = null
             this.$router.push('/profile')
           }, 1000)
         } catch (e) {
+          this.errorsAuth = e.errors
           this.showLoader = false
         }
       }

@@ -27,7 +27,7 @@ body {
   position: relative;
   line-height: 1.5;
   font-size: 1.4rem;
-  font-family: "ubuntu", sans-serif;
+  font-family: $font-main;
   font-weight: 300;
   color: $color-text
 }
@@ -71,12 +71,16 @@ a, a:hover, a:focus, a:active {
     display: flex;
     justify-content: space-between;
     background-color: $color-white!important;
+    position: relative;
   }
 }
 
 .main-content {
   width: 100%;
   padding: 2.5rem 2rem 5rem 2rem;
+  @include md-block() {
+    padding: 0 0 5rem 0;
+  }
 }
 
 .hidden {

@@ -8,6 +8,7 @@
     <div class="container">
       <div class="row">
         <div class="profile">
+          <loader v-if="showLoader" />
           <div class="page-title">
             <p><i class="icon-address-book"></i>&nbsp;Компания</p>
           </div>
@@ -17,75 +18,79 @@
               <span>Организация : {{ profile.bank_title }}</span>
             </div>
             <div class="wrp-field">
-              <label :class="{'text-warning': $v.countCars.$error }">Общее количество машин в собственности*</label>
+              <label :class="{'text-warning': $v.countCars.$error || serverErrors.count_trucks.length }">Общее количество машин в собственности*</label>
               <input
                   type="text"
                   placeholder="Общее количество машин в собственности"
                   v-model="countCars"
                   @blur="validateField('countCars')"
-                  :class="{'is-danger': $v.countCars.$error}"
+                  :class="{'is-danger': $v.countCars.$error || serverErrors.count_trucks.length}"
                   v-mask="'##'"
               />
               <p class="text-warning" v-if="$v.countCars.$error">Необходимо заполнить «Общее количество машин в собственности».</p>
+              <div class="errors-server" v-if="serverErrors.count_trucks.length">
+                <p class="text-warning" v-for="(error, idx) in serverErrors.count_trucks" :key="idx">{{ error }}</p>
+              </div>
             </div>
             <div class="wrp-field">
-              <label :class="{'text-warning': $v.postAddress.$error }">Почтовый адрес</label>
+              <label :class="{'text-warning': $v.postAddress.$error || serverErrors.post_address.length }">Почтовый адрес*</label>
               <input
                   type="text"
                   placeholder="Почтовый адрес"
                   v-model="postAddress"
                   @blur="validateField('postAddress')"
-                  :class="{'is-danger': $v.postAddress.$error}"
+                  :class="{'is-danger': $v.postAddress.$error || serverErrors.post_address.length }"
               />
               <p class="text-warning" v-if="$v.postAddress.$error">Необходимо заполнить «Почтовый адрес».</p>
+              <div class="errors-server" v-if="serverErrors.post_address.length">
+                <p class="text-warning" v-for="(error, idx) in serverErrors.post_address" :key="idx">{{ error }}</p>
+              </div>
             </div>
             <div class="wrp-field">
-              <label :class="{'text-warning': $v.site.$error }">Сайт компании</label>
+              <label :class="{'text-warning': $v.site.$error || serverErrors.site.length}">Сайт компании</label>
               <input
                   type="text"
                   placeholder="Сайт компании"
                   v-model="site"
                   @blur="validateField('site')"
-                  :class="{'is-danger': $v.site.$error}"
+                  :class="{'is-danger': $v.site.$error || serverErrors.site.length}"
               />
               <p class="text-warning" v-if="$v.site.$error">Значение «Сайт компании» не является правильным URL.</p>
+              <div class="errors-server" v-if="serverErrors.site.length">
+                <p class="text-warning" v-for="(error, idx) in serverErrors.site" :key="idx">{{ error }}</p>
+              </div>
             </div>
             <div class="wrp-field">
-              <label :class="{'text-warning': $v.bik.$error }">БИК</label>
-              <multiselect
-                  v-model="$v.bik.$model"
-                  track-by="value"
-                  deselect-label="Удалить"
-                  label="value"
-                  :options="dataOptionsBik"
-                  :allow-empty="false"
-                  :show-labels="false"
-                  :hide-selected="false"
+              <label :class="{'text-warning': $v.bik.$error || serverErrors.bik.length}">БИК</label>
+              <autocomplete
+                  :search="asyncFind"
                   placeholder="БИК"
-                  @select="selectedBik"
-                  :internal-search="false"
-                  :max-height="280"
                   v-mask="'#########'"
-                  :option-height="75"
-                  @close="validateField('bik')"
-                  @search-change="asyncFind"
-                  :class="{'is-danger': $v.bik.$error}"
+                  @blur="validateField('bik')"
+                  :class="{'is-danger': $v.bik.$error || serverErrors.bik.length }"
+                  :get-result-value="getResultValue"
+                  @submit="onSubmit"
+                  :value="bik"
               >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <span>{{ option.data ? option.data['bic'] : '' }}</span>
+                <template #result="{ result, props }">
+                  <li
+                      v-bind="props"
+                      class="autocomplete-result"
+                  >
+                    <p class="title">
+                      {{ result.data.name.payment }}
+                    </p>
+                    <div class="descr">
+                      <p>{{ result.data.bic }}</p>
+                      <p>{{ result.data.address.value }}</p>
+                    </div>
+                  </li>
                 </template>
-                <template slot="option" slot-scope="props">
-                  <div class="option__desc">
-                    <span class="option__title">{{ props.option.value }}</span>
-                    <span class="option__small">{{ props.option.data.bic }} {{ props.option.data.address.value }}</span>
-                  </div>
-                </template>
-                <span slot="noResult">Не найдено</span>
-                <span slot="noOptions">Введите БИК</span>
-                <span slot="beforeList">Выберите вариант или продолжите ввод</span>
-              </multiselect>
+              </autocomplete>
               <p class="text-warning" v-if="$v.bik.$error">Бик должен быть выбран из всплывающей подсказки.</p>
-
+              <div class="errors-server" v-if="serverErrors.bik.length">
+                <p class="text-warning" v-for="(error, idx) in serverErrors.bik" :key="idx">{{ error }}</p>
+              </div>
             </div>
             <div class="wrp-field">
               <label>Наименование Банка</label>
@@ -106,16 +111,19 @@
               />
             </div>
             <div class="wrp-field">
-              <label :class="{'text-warning': $v.bankAccount.$error }">Номер банковского счета</label>
+              <label :class="{'text-warning': $v.bankAccount.$error || serverErrors.bank_account.length }">Номер банковского счета</label>
               <input
                   type="text"
                   v-model="bankAccount"
                   @blur="validateField('bankAccount')"
-                  :class="{'is-danger': $v.bankAccount.$error}"
+                  :class="{'is-danger': $v.bankAccount.$error || serverErrors.bank_account.length}"
                   placeholder="Номер банковского счета"
                   v-mask="'####################'"
               />
               <p class="text-warning" v-if="$v.bankAccount.$error">Значение «Номер банковского счета» должно содержать минимум 20 символов.</p>
+              <div class="errors-server" v-if="serverErrors.bank_account.length">
+                <p class="text-warning" v-for="(error, idx) in serverErrors.bank_account" :key="idx">{{ error }}</p>
+              </div>
             </div>
             <div class="wrp-field">
               <label>Соглашение об электронном взаимодействии</label>
@@ -125,11 +133,6 @@
                     <p class="file-name">{{ attachment.name }}</p>
                     <div class="file-btns">
                       <ul>
-<!--                        <li v-if="!!attachment.id">-->
-<!--                          <a :href="attachment.link" download="attachment" class="file-download">-->
-<!--                            <i class="icon-download-alt"></i>-->
-<!--                          </a>-->
-<!--                        </li>-->
                         <li v-if="!!attachment.id">
                           <a :href="attachment.link" class="file-view" target="_blank">
                             <i class="icon-search"></i>
@@ -166,7 +169,7 @@
               <p class="wrp-field__static">Нет</p>
             </div>
             <div class="wrp-field">
-              <label>Срок действия соглашения об электронном взаимодействии</label>
+              <label>Срок действия соглашения об электронном взаимодействии*</label>
               <p class="wrp-field__static">Нет</p>
             </div>
             <div class="wrp-field">
@@ -185,25 +188,38 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
-import multiselect from 'vue-multiselect'
-import {fetchBik, fetchWithAuth} from '../../js/repository/repository'
+import { fetchBik, fetchWithAuth } from '../../js/repository/repository'
+import loader from '../../components/loader.vue'
+import Autocomplete from '@trevoreyre/autocomplete-vue'
 
 export default {
   components: {
-    multiselect
+    Autocomplete,
+    loader
   },
   data () {
     return {
       attachments: [],
       countCars: '',
-      dataOptionsBik: [],
-      bik: {},
+      bik: '',
       site: '',
+      showLoader: false,
       nameBank: '',
       bankAccount: '',
       correspondentAccount: '',
       postAddress: '',
-      endpoint: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank'
+      endpoint: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank',
+      isSelectedBik: false,
+      serverErrors: {
+        count_trucks: [],
+        post_address: [],
+        bik: [],
+        bank_title: [],
+        corr_account: [],
+        bank_account: [],
+        site: [],
+        edo_contracts: []
+      }
     }
   },
   computed: {
@@ -214,13 +230,20 @@ export default {
   },
   validations: {
     bik: {
-      required
+      minLength: minLength(9),
+      isSelected () {
+        return this.isSelectedBik
+      }
     },
     bankAccount: {
       minLength: minLength(20)
     },
     site: {
-      required
+      required,
+      validUrl (url) {
+        let objRE = /(^https?:\/\/)?[a-z0-9~_\-\.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$/i
+        return objRE.test(url)
+      }
     },
     postAddress: {
       required
@@ -235,14 +258,29 @@ export default {
       this.$v[vmfield].$touch()
     },
     async asyncFind (query) {
-      if (query) {
-        let formData = {
-          count: 5,
-          query
-        }
-        const bikBanks = await fetchBik('post', this.endpoint, formData)
-        this.dataOptionsBik = bikBanks.data.suggestions
+      this.isSelectedBik = false
+      this.bik = query
+      if (query.length < 1) {
+        this.isSelectedBik = true
+        this.nameBank = ''
+        this.correspondentAccount = ''
+        return []
       }
+      let formData = {
+        count: 5,
+        query
+      }
+      const bikBanks = await fetchBik('post', this.endpoint, formData)
+      return bikBanks.data.suggestions
+    },
+    getResultValue (result) {
+      return result.data.bic
+    },
+    onSubmit (result) {
+      this.nameBank = result.data.name.payment
+      this.correspondentAccount = result.data.correspondent_account
+      this.bik = result.data.bic
+      this.isSelectedBik = true
     },
     async submitHandler () {
       this.$v.$touch()
@@ -250,19 +288,27 @@ export default {
         let formData = {
           count_trucks: this.countCars,
           post_address: this.postAddress,
-          bik: this.bik.data.bic,
+          bik: this.bik,
           bank_title: this.nameBank,
           corr_account: this.correspondentAccount,
           bank_account: this.bankAccount,
           site: this.site,
           edo_contracts: getDataBinary(this.attachments)
         }
+        this.showLoader = true
 
         console.log(formData)
 
         try {
-          const dataProfile = await fetchWithAuth('post', '/company-profile', formData)
-          console.log(dataProfile)
+          const updateProfile = await fetchWithAuth('post', '/company-profile', formData)
+
+          if (updateProfile.data.code !== 200) {
+            setTimeout(() => {
+              const errors = updateProfile.data.errors
+              this.serverErrors = { ...this.serverErrors, ...errors }
+              this.showLoader = false
+            }, 600)
+          } else {}
           // const data = dataProfile.data
           // if (data.code === 200) {
           //   commit('setProfile', data.data)
@@ -270,13 +316,10 @@ export default {
           //   throw data
           // }
         } catch (e) {
+          this.showLoader = false
           throw e
         }
       }
-    },
-    selectedBik (value) {
-      this.nameBank = value.data.name.payment
-      this.correspondentAccount = value.data.correspondent_account
     },
     async fileInputChange (obj) {
       let file = obj.target.files[0]
@@ -309,33 +352,26 @@ export default {
           file
         }
       })
-
-      // try {
-      //   let upload = await Repository.post('upload-file', data)
-      //
-      //   if (upload.status === 200) {
-      //     setTimeout(() => {
-      //       this.$store.commit('setAnswer', {
-      //         id: this.dataAnswer.id,
-      //         field: 'attachments',
-      //         value: upload.data.id
-      //       })
-      //       this.attachments.push({
-      //         id: upload.data.id,
-      //         name: limitString(upload.data.name, 27),
-      //         url: upload.data.url
-      //       })
-      //       this.showLoader = false
-      //     }, 600)
-      //   }
-      // } catch (error) {
-      //   alert('Ошибка загрузки файла')
-      //   this.showLoader = false
-      //   console.log(error)
-      // }
     },
     deleteAttach (id) {
       this.attachments.splice(id, 1)
+    }
+  },
+  watch: {
+    bankAccount (v) {
+      this.serverErrors.bank_account = []
+    },
+    countCars (v) {
+      this.serverErrors.count_trucks = []
+    },
+    bik (v) {
+      this.serverErrors.bik = []
+    },
+    site (v) {
+      this.serverErrors.site = []
+    },
+    postAddress (v) {
+      this.serverErrors.post_address = []
     }
   },
   async created () {
@@ -346,18 +382,11 @@ export default {
       this.correspondentAccount = this.profile.corr_account
       this.postAddress = this.profile.post_address
       this.site = this.profile.site
-      this.bik = {
-        data: {
-          bic: this.profile.bik
-        },
-        value: this.profile.bank_title
-      }
+      this.bik = this.profile.bik
+      this.isSelectedBik = !!this.bik
       this.attachments = this.profile.edo_contracts.map((attach, idx) => {
         return { ...attach, name: `Scan Edo #${idx + 1}`, new: { is: false } }
       })
-
-      // this.bik['value'] = this.profile.bank_account
-      // this.countCars = this.profile.post_address
     }
   }
 }
@@ -379,19 +408,15 @@ function validSize (obj) {
 }
 
 function getDataBinary (attachments) {
-  let formDataArr = []
-  let arrFiles = attachments.map(attach => {
-    return attach.new.is ? attach.new.file : null
+  let arrFiles = []
+  arrFiles = attachments.map(attach => {
+    // return attach.new.is ? attach.new.file.name : null
+    return !attach.new.is ? attach.link : null
   }).filter(Boolean)
-  if (arrFiles.length) {
-    arrFiles.forEach(fl => {
-      let formData = new FormData()
-      formData.append(fl.name, fl)
-      formDataArr.push(formData)
-    })
-  }
 
-  return formDataArr
+  let ff = arrFiles[0].split('files/')[1]
+
+  return [btoa(ff)]
 }
 
 </script>
