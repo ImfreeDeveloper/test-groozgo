@@ -224,7 +224,6 @@ export default {
   },
   computed: {
     profile () {
-      console.log(this.$store.getters.getProfile)
       return this.$store.getters.getProfile
     }
   },
@@ -241,6 +240,7 @@ export default {
     site: {
       required,
       validUrl (url) {
+        /* eslint-disable */
         let objRE = /(^https?:\/\/)?[a-z0-9~_\-\.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$/i
         return objRE.test(url)
       }
@@ -296,8 +296,6 @@ export default {
           edo_contracts: getDataBinary(this.attachments)
         }
         this.showLoader = true
-
-        console.log(formData)
 
         try {
           const updateProfile = await fetchWithAuth('post', '/company-profile', formData)
