@@ -126,7 +126,7 @@
               </div>
             </div>
             <div class="wrp-field">
-              <label>Соглашение об электронном взаимодействии</label>
+              <label :class="{'text-warning': serverErrors.edo_contracts.length }">Соглашение об электронном взаимодействии</label>
               <div class="wrp-field-files">
                 <div class="file-items">
                   <div class="file-wrap" v-for="(attachment, idx) in attachments" :key="idx">
@@ -163,6 +163,9 @@
                   Скачать шаблон
                 </a>
               </div>
+            </div>
+            <div class="wrp-field" v-if="serverErrors.edo_contracts.length">
+              <label class="text-warning" v-for="(error, idx) in serverErrors.edo_contracts" :key="idx">{{ error }}</label>
             </div>
             <div class="wrp-field">
               <label>Получен оригинал соглашения об электронном взаимодействии</label>
@@ -374,6 +377,9 @@ export default {
     },
     postAddress (v) {
       this.serverErrors.post_address = []
+    },
+    attachments (v) {
+      this.serverErrors.edo_contracts = []
     }
   },
   async created () {
