@@ -304,19 +304,20 @@ export default {
 
         try {
           const updateProfile = await fetchWithAuth('post', '/company-profile', formData)
+          const data = updateProfile.data
 
-          if (updateProfile.data.code !== 200) {
+          if (data.code !== 200) {
             setTimeout(() => {
-              const errors = updateProfile.data.errors
+              const errors = data.errors
               this.serverErrors = { ...this.serverErrors, ...errors }
               this.showLoader = false
             }, 600)
           } else {
             setTimeout(() => {
               this.showLoader = false
-              console.log(updateProfile.data.data)
-              this.$store.commit('setProfile', updateProfile.data.data)
-              this.$store.commit('setSuccess', updateProfile.data)
+              console.log(data.data)
+              this.$store.commit('setProfile', data.data)
+              this.$store.commit('setSuccess', data)
             }, 600)
           }
         } catch (e) {
@@ -379,12 +380,14 @@ export default {
     },
     attachments (v) {
       this.serverErrors.edo_contracts = []
+    },
+    profile(value) {
+      this.attachments = getFilesFormatted(value.edo_contracts)
     }
   },
   async created () {
     await this.$store.dispatch('profile')
     if (this.profile) {
-      console.log(this.profile)
       this.countCars = this.profile.count_trucks
       this.nameBank = this.profile.bank_title
       this.correspondentAccount = this.profile.corr_account
@@ -393,9 +396,7 @@ export default {
       this.bik = this.profile.bik
       this.isSelectedBik = !!this.bik
       this.bankAccount = this.profile.bank_account
-      this.attachments = this.profile.edo_contracts.map((attach, idx) => {
-        return { ...attach, name: `Scan Edo #${idx + 1}`, new: { is: false } }
-      })
+      this.attachments = getFilesFormatted(this.profile.edo_contracts)
     }
   }
 }
@@ -423,6 +424,12 @@ function getDataFiles (attachments) {
   }).filter(Boolean)
 
   return arrFiles
+}
+
+function getFilesFormatted(files) {
+  return files.map((attach, idx) => {
+    return { ...attach, name: `Scan Edo #${idx + 1}`, new: { is: false } }
+  })
 }
 
 </script>
