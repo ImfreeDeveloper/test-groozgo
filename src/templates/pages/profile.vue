@@ -139,7 +139,7 @@
                           </a>
                         </li>
                         <li>
-                          <a href="#" class="file-delete" @click="deleteAttach(idx)">
+                          <a href="#" class="file-delete" @click.prevent="deleteAttach(idx)">
                             <i class="icon-trash-empty"></i>
                           </a>
                         </li>
@@ -288,7 +288,8 @@ export default {
     async submitHandler () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        const filesData = getDataBinary(this.attachments)
+        const filesData = getDataFiles(this.attachments)
+        console.log(filesData)
         let formData = new FormData()
         formData.append('count_trucks', this.countCars)
         formData.append('post_address', this.postAddress)
@@ -314,6 +315,8 @@ export default {
           } else {
             setTimeout(() => {
               this.showLoader = false
+              console.log(updateProfile.data.data)
+              this.$store.commit('setProfile', updateProfile.data.data)
               this.$store.commit('setSuccess', updateProfile.data)
             }, 600)
           }
@@ -339,7 +342,7 @@ export default {
       }
 
       if (!validSize(file)) {
-        alert('Превышен максимальный размер файла 2 мб!')
+        alert('Размер файла должен быть от 10 кб до 2 мб!')
         obj.target.value = ''
         this.showLoader = false
         return false
@@ -411,10 +414,10 @@ function validEXT (ext) {
 // Проверка размера добавляемого файла
 function validSize (obj) {
   var osize = obj.size
-  return !((osize > 2 * 1024 * 1024))
+  return !((osize > 2 * 1024 * 1024) || (osize < 10 * 1024))
 }
 
-function getDataBinary (attachments) {
+function getDataFiles (attachments) {
   let arrFiles = []
   arrFiles = attachments.map(attach => {
     return attach.new.is ? attach.new.file : null
