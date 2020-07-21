@@ -285,15 +285,17 @@ export default {
     async submitHandler () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        let formData = {
-          count_trucks: this.countCars,
-          post_address: this.postAddress,
-          bik: this.bik,
-          bank_title: this.nameBank,
-          corr_account: this.correspondentAccount,
-          bank_account: this.bankAccount,
-          site: this.site,
-          edo_contracts: getDataBinary(this.attachments)
+        const filesData = getDataBinary(this.attachments)
+        let formData = new FormData()
+        formData.append('count_trucks', this.countCars)
+        formData.append('post_address', this.postAddress)
+        formData.append('bik', this.bik)
+        formData.append('bank_title', this.nameBank)
+        formData.append('corr_account', this.correspondentAccount)
+        formData.append('bank_account', this.bankAccount)
+        formData.append('site', this.site)
+        for (let i = 0; i < filesData.length; i++) {
+          formData.append('edo_contracts[]', filesData[i]);
         }
         this.showLoader = true
 
@@ -306,7 +308,9 @@ export default {
               this.serverErrors = { ...this.serverErrors, ...errors }
               this.showLoader = false
             }, 600)
-          } else {}
+          } else {
+            this.showLoader = false
+          }
           // const data = dataProfile.data
           // if (data.code === 200) {
           //   commit('setProfile', data.data)
@@ -375,6 +379,7 @@ export default {
   async created () {
     await this.$store.dispatch('profile')
     if (this.profile) {
+      console.log(this.profile)
       this.countCars = this.profile.count_trucks
       this.nameBank = this.profile.bank_title
       this.correspondentAccount = this.profile.corr_account
@@ -382,6 +387,7 @@ export default {
       this.site = this.profile.site
       this.bik = this.profile.bik
       this.isSelectedBik = !!this.bik
+      this.bankAccount = this.profile.bank_account
       this.attachments = this.profile.edo_contracts.map((attach, idx) => {
         return { ...attach, name: `Scan Edo #${idx + 1}`, new: { is: false } }
       })
@@ -408,13 +414,10 @@ function validSize (obj) {
 function getDataBinary (attachments) {
   let arrFiles = []
   arrFiles = attachments.map(attach => {
-    // return attach.new.is ? attach.new.file.name : null
-    return !attach.new.is ? attach.link : null
+    return attach.new.is ? attach.new.file : null
   }).filter(Boolean)
 
-  let ff = arrFiles[0].split('files/')[1]
-
-  return [btoa(ff)]
+  return arrFiles
 }
 
 </script>
