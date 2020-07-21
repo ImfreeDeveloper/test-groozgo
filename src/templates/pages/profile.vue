@@ -289,7 +289,6 @@ export default {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         const filesData = getDataFiles(this.attachments)
-        console.log(filesData)
         let formData = new FormData()
         formData.append('count_trucks', this.countCars)
         formData.append('post_address', this.postAddress)
