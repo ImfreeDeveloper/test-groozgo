@@ -312,14 +312,11 @@ export default {
               this.showLoader = false
             }, 600)
           } else {
-            this.showLoader = false
+            setTimeout(() => {
+              this.showLoader = false
+              this.$store.commit('setSuccess', updateProfile.data)
+            }, 600)
           }
-          // const data = dataProfile.data
-          // if (data.code === 200) {
-          //   commit('setProfile', data.data)
-          // } else {
-          //   throw data
-          // }
         } catch (e) {
           this.showLoader = false
           throw e

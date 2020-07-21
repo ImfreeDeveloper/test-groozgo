@@ -1,0 +1,15 @@
+.v-alert {
+  position: fixed;
+  top: 5rem;
+  right: 5rem;
+  border-radius: .4rem;
+  max-width: 40rem;
+  padding: 1.5rem 2rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  &.success {
+    background-color: #4caf50;
+    color: $color-white;
+
+  }
+}

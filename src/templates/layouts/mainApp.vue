@@ -13,6 +13,12 @@
       >Выйти</p>
     </header>
     <main class="content content-with-sidebar">
+      <v-alert
+          type="success"
+          v-if="success"
+      >
+        {{ success.message }}
+      </v-alert>
       <div class="sidebar" :class="{'open': isOpen}"></div>
       <div class="main-content">
         <slot />
@@ -26,10 +32,17 @@
 
 <script>
 import hamburger from '../../components/hamburger.vue'
+import vAlert from '../../components/v-alert.vue'
 
 export default {
   components: {
-    hamburger
+    hamburger,
+    vAlert
+  },
+  computed: {
+    success () {
+      return this.$store.getters.success
+    }
   },
   data () {
     return {
@@ -43,6 +56,15 @@ export default {
     },
     open (val) {
       this.isOpen = val
+    }
+  },
+  watch: {
+    success (val) {
+      if (val) {
+        setTimeout(() => {
+          this.$store.commit('clearSuccess')
+        }, 3000)
+      }
     }
   }
 }

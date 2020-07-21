@@ -9,7 +9,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     error: null,
-    profile: null
+    profile: null,
+    success: null
   },
   mutations: {
     setProfile (state, profile) {
@@ -20,6 +21,12 @@ export default new Vuex.Store({
     },
     clearError (state) {
       state.error = null
+    },
+    setSuccess (state, success) {
+      state.success = success
+    },
+    clearSuccess (state) {
+      state.success = null
     }
   },
   actions: {
@@ -40,7 +47,8 @@ export default new Vuex.Store({
   },
   getters: {
     error: s => s.error,
-    getProfile: s => s.profile
+    getProfile: s => s.profile,
+    success: s => s.success
   },
   modules: {
     auth
