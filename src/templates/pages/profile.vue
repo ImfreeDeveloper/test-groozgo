@@ -17,49 +17,34 @@
               <span>ИНН / КПП : {{ profile.inn }} / {{ profile.kpp }}</span>
               <span>Организация : {{ profile.bank_title }}</span>
             </div>
-            <div class="wrp-field">
-              <label :class="{'text-warning': $v.countCars.$error || serverErrors.count_trucks.length }">Общее количество машин в собственности*</label>
-              <input
-                  type="text"
-                  placeholder="Общее количество машин в собственности"
-                  v-model="countCars"
-                  @blur="validateField('countCars')"
-                  :class="{'is-danger': $v.countCars.$error || serverErrors.count_trucks.length}"
-                  v-mask="'##'"
-              />
-              <p class="text-warning" v-if="$v.countCars.$error">Необходимо заполнить «Общее количество машин в собственности».</p>
-              <div class="errors-server" v-if="serverErrors.count_trucks.length">
-                <p class="text-warning" v-for="(error, idx) in serverErrors.count_trucks" :key="idx">{{ error }}</p>
-              </div>
-            </div>
-            <div class="wrp-field">
-              <label :class="{'text-warning': $v.postAddress.$error || serverErrors.post_address.length }">Почтовый адрес*</label>
-              <input
-                  type="text"
-                  placeholder="Почтовый адрес"
-                  v-model="postAddress"
-                  @blur="validateField('postAddress')"
-                  :class="{'is-danger': $v.postAddress.$error || serverErrors.post_address.length }"
-              />
-              <p class="text-warning" v-if="$v.postAddress.$error">Необходимо заполнить «Почтовый адрес».</p>
-              <div class="errors-server" v-if="serverErrors.post_address.length">
-                <p class="text-warning" v-for="(error, idx) in serverErrors.post_address" :key="idx">{{ error }}</p>
-              </div>
-            </div>
-            <div class="wrp-field">
-              <label :class="{'text-warning': $v.site.$error || serverErrors.site.length}">Сайт компании</label>
-              <input
-                  type="text"
-                  placeholder="Сайт компании"
-                  v-model="site"
-                  @blur="validateField('site')"
-                  :class="{'is-danger': $v.site.$error || serverErrors.site.length}"
-              />
-              <p class="text-warning" v-if="$v.site.$error">Значение «Сайт компании» не является правильным URL.</p>
-              <div class="errors-server" v-if="serverErrors.site.length">
-                <p class="text-warning" v-for="(error, idx) in serverErrors.site" :key="idx">{{ error }}</p>
-              </div>
-            </div>
+            <field-input
+              label="Общее количество машин в собственности*"
+              v-model="countCars"
+              placeholder="Общее количество машин в собственности"
+              :validError="$v.countCars.$error"
+              validErrorText="Необходимо заполнить «Общее количество машин в собственности»."
+              :serverError="serverErrors.count_trucks"
+              :setMask="'##'"
+              @blur="validateField('countCars')"
+            />
+            <field-input
+                label="Почтовый адрес*"
+                v-model="postAddress"
+                placeholder="Почтовый адрес"
+                :validError="$v.postAddress.$error"
+                validErrorText="Необходимо заполнить «Почтовый адрес»."
+                :serverError="serverErrors.post_address"
+                @blur="validateField('postAddress')"
+            />
+            <field-input
+                label="Сайт компании"
+                v-model="site"
+                placeholder="Сайт компании"
+                :validError="$v.site.$error"
+                validErrorText="Значение «Сайт компании» не является правильным URL."
+                :serverError="serverErrors.site"
+                @blur="validateField('site')"
+            />
             <div class="wrp-field">
               <label :class="{'text-warning': $v.bik.$error || serverErrors.bik.length}">БИК</label>
               <autocomplete
@@ -92,39 +77,37 @@
                 <p class="text-warning" v-for="(error, idx) in serverErrors.bik" :key="idx">{{ error }}</p>
               </div>
             </div>
-            <div class="wrp-field">
-              <label>Наименование Банка</label>
-              <input
-                  type="text"
-                  v-model="nameBank"
-                  placeholder="Наименование Банка"
-                  disabled
-              />
-            </div>
-            <div class="wrp-field">
-              <label>Корреспондентский счет</label>
-              <input
-                  type="text"
-                  v-model="correspondentAccount"
-                  placeholder="Корреспондентский счет"
-                  disabled
-              />
-            </div>
-            <div class="wrp-field">
-              <label :class="{'text-warning': $v.bankAccount.$error || serverErrors.bank_account.length }">Номер банковского счета</label>
-              <input
-                  type="text"
-                  v-model="bankAccount"
-                  @blur="validateField('bankAccount')"
-                  :class="{'is-danger': $v.bankAccount.$error || serverErrors.bank_account.length}"
-                  placeholder="Номер банковского счета"
-                  v-mask="'####################'"
-              />
-              <p class="text-warning" v-if="$v.bankAccount.$error">Значение «Номер банковского счета» должно содержать минимум 20 символов.</p>
-              <div class="errors-server" v-if="serverErrors.bank_account.length">
-                <p class="text-warning" v-for="(error, idx) in serverErrors.bank_account" :key="idx">{{ error }}</p>
-              </div>
-            </div>
+            <field-input
+                label="Наименование Банка"
+                v-model="nameBank"
+                placeholder="Наименование Банка"
+                :validError="$v.nameBank.$error"
+                validErrorText="Необходимо заполнить «Наименование Банка»."
+                :serverError="serverErrors.bank_title"
+                @blur="validateField('nameBank')"
+                disabled
+            />
+            <field-input
+                label="Корреспондентский счет"
+                v-model="correspondentAccount"
+                placeholder="Корреспондентский счет"
+                :validError="$v.correspondentAccount.$error"
+                validErrorText="Необходимо заполнить «Корреспондентский счет»."
+                :serverError="serverErrors.corr_account"
+                @blur="validateField('correspondentAccount')"
+                disabled
+            />
+            <field-input
+                label="Номер банковского счета"
+                v-model="bankAccount"
+                placeholder="Номер банковского счета"
+                :validError="$v.bankAccount.$error"
+                validErrorText="Значение «Номер банковского счета» должно содержать минимум 20 символов."
+                :serverError="serverErrors.bank_account"
+                @blur="validateField('bankAccount')"
+                :setMask="'####################'"
+            />
+
             <div class="wrp-field">
               <label :class="{'text-warning': serverErrors.edo_contracts.length }">Соглашение об электронном взаимодействии</label>
               <div class="wrp-field-files">
@@ -159,14 +142,17 @@
                     </button>
                   </div>
                 </div>
+
                 <a :href="profile.edo_contract_link" target="_blank" class="btn btn-secondary-transparent" >
                   Скачать шаблон
                 </a>
               </div>
             </div>
+
             <div class="wrp-field" v-if="serverErrors.edo_contracts.length">
               <label class="text-warning" v-for="(error, idx) in serverErrors.edo_contracts" :key="idx">{{ error }}</label>
             </div>
+
             <div class="wrp-field">
               <label>Получен оригинал соглашения об электронном взаимодействии</label>
               <p class="wrp-field__static">Нет</p>
@@ -191,14 +177,16 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
+import Autocomplete from '@trevoreyre/autocomplete-vue'
 import { fetchBik, fetchWithAuth } from '../../js/repository/repository'
 import loader from '../../components/loader.vue'
-import Autocomplete from '@trevoreyre/autocomplete-vue'
+import fieldInput from '../../components/inputs/field-input.vue'
 
 export default {
   components: {
     Autocomplete,
-    loader
+    loader,
+    fieldInput
   },
   data () {
     return {
@@ -250,6 +238,16 @@ export default {
     },
     postAddress: {
       required
+    },
+    nameBank: {
+      isSelected () {
+        return this.isSelectedBik
+      }
+    },
+    correspondentAccount: {
+      isSelected () {
+        return this.isSelectedBik
+      }
     },
     countCars: {
       required,
