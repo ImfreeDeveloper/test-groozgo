@@ -45,38 +45,17 @@
                 :serverError="serverErrors.site"
                 @blur="validateField('site')"
             />
-            <div class="wrp-field">
-              <label :class="{'text-warning': $v.bik.$error || serverErrors.bik.length}">БИК</label>
-              <autocomplete
-                  :search="asyncFind"
-                  placeholder="БИК"
-                  v-mask="'#########'"
-                  @blur="validateField('bik')"
-                  :class="{'is-danger': $v.bik.$error || serverErrors.bik.length }"
-                  :get-result-value="getResultValue"
-                  @submit="onSubmit"
-                  :value="bik"
-              >
-                <template #result="{ result, props }">
-                  <li
-                      v-bind="props"
-                      class="autocomplete-result"
-                  >
-                    <p class="title">
-                      {{ result.data.name.payment }}
-                    </p>
-                    <div class="descr">
-                      <p>{{ result.data.bic }}</p>
-                      <p>{{ result.data.address.value }}</p>
-                    </div>
-                  </li>
-                </template>
-              </autocomplete>
-              <p class="text-warning" v-if="$v.bik.$error">Бик должен быть выбран из всплывающей подсказки.</p>
-              <div class="errors-server" v-if="serverErrors.bik.length">
-                <p class="text-warning" v-for="(error, idx) in serverErrors.bik" :key="idx">{{ error }}</p>
-              </div>
-            </div>
+            <field-input-autocomplete
+                label="БИК"
+                placeholder="БИК"
+                :validError="$v.bik.$error"
+                validErrorText="Бик должен быть выбран из всплывающей подсказки."
+                :serverError="serverErrors.bik"
+                :setMask="'#########'"
+                @blur="validateField('bik')"
+                @submit="onSubmitAutocomplete"
+                v-model="bik"
+            />
             <field-input
                 label="Наименование Банка"
                 v-model="nameBank"
@@ -177,16 +156,16 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
-import Autocomplete from '@trevoreyre/autocomplete-vue'
-import { fetchBik, fetchWithAuth } from '../../js/repository/repository'
+import { fetchWithAuth } from '../../js/repository/repository'
 import loader from '../../components/loader.vue'
 import fieldInput from '../../components/inputs/field-input.vue'
+import fieldInputAutocomplete from '../../components/inputs/field-input-autocomplete.vue'
 
 export default {
   components: {
-    Autocomplete,
     loader,
-    fieldInput
+    fieldInput,
+    fieldInputAutocomplete
   },
   data () {
     return {
@@ -199,7 +178,6 @@ export default {
       bankAccount: '',
       correspondentAccount: '',
       postAddress: '',
-      endpoint: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank',
       isSelectedBik: false,
       serverErrors: {
         count_trucks: [],
@@ -258,31 +236,14 @@ export default {
     validateField (vmfield) {
       this.$v[vmfield].$touch()
     },
-    async asyncFind (query) {
-      this.isSelectedBik = false
-      this.bik = query
-      if (query.length < 1) {
-        this.isSelectedBik = true
-        this.nameBank = ''
-        this.correspondentAccount = ''
-        return []
-      }
-      let formData = {
-        count: 5,
-        query
-      }
-      const bikBanks = await fetchBik('post', this.endpoint, formData)
-      return bikBanks.data.suggestions
-    },
-    getResultValue (result) {
-      return result.data.bic
-    },
-    onSubmit (result) {
+
+    onSubmitAutocomplete (result) {
       this.nameBank = result.data.name.payment
       this.correspondentAccount = result.data.correspondent_account
       this.bik = result.data.bic
       this.isSelectedBik = true
     },
+
     async submitHandler () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
@@ -324,6 +285,7 @@ export default {
         }
       }
     },
+
     async fileInputChange (obj) {
       let file = obj.target.files[0]
       if (!file) return false
@@ -368,6 +330,14 @@ export default {
       this.serverErrors.count_trucks = []
     },
     bik (v) {
+      if (v.length < 9) {
+        this.isSelectedBik = false
+      }
+      if (v.length < 1) {
+        this.isSelectedBik = true
+        this.nameBank = ''
+        this.correspondentAccount = ''
+      }
       this.serverErrors.bik = []
     },
     site (v) {
