@@ -86,52 +86,12 @@
                 @blur="validateField('bankAccount')"
                 :setMask="'####################'"
             />
-
-            <div class="wrp-field">
-              <label :class="{'text-warning': serverErrors.edo_contracts.length }">Соглашение об электронном взаимодействии</label>
-              <div class="wrp-field-files">
-                <div class="file-items">
-                  <div class="file-wrap" v-for="(attachment, idx) in attachments" :key="idx">
-                    <p class="file-name">{{ attachment.name }}</p>
-                    <div class="file-btns">
-                      <ul>
-                        <li v-if="!!attachment.id">
-                          <a :href="attachment.link" class="file-view" target="_blank">
-                            <i class="icon-search"></i>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" class="file-delete" @click.prevent="deleteAttach(idx)">
-                            <i class="icon-trash-empty"></i>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="file-attach">
-                    <button class="btn btn-secondary btn-secondary-hover-transparent">
-                      &#10010;
-                      <input
-                          id="file"
-                          type="file"
-                          name="title"
-                          @change="fileInputChange"
-                      />
-                    </button>
-                  </div>
-                </div>
-
-                <a :href="profile.edo_contract_link" target="_blank" class="btn btn-secondary-transparent" >
-                  Скачать шаблон
-                </a>
-              </div>
-            </div>
-
-            <div class="wrp-field" v-if="serverErrors.edo_contracts.length">
-              <label class="text-warning" v-for="(error, idx) in serverErrors.edo_contracts" :key="idx">{{ error }}</label>
-            </div>
-
+            <field-input-attach
+                label="Соглашение об электронном взаимодействии"
+                v-model="attachments"
+                :edoContractLink = profile.edo_contract_link
+                :serverError="serverErrors.edo_contracts"
+            />
             <div class="wrp-field">
               <label>Получен оригинал соглашения об электронном взаимодействии</label>
               <p class="wrp-field__static">Нет</p>
@@ -160,12 +120,14 @@ import { fetchWithAuth } from '../../js/repository/repository'
 import loader from '../../components/loader.vue'
 import fieldInput from '../../components/inputs/field-input.vue'
 import fieldInputAutocomplete from '../../components/inputs/field-input-autocomplete.vue'
+import fieldInputAttach from '../../components/inputs/field-input-attach.vue'
 
 export default {
   components: {
     loader,
     fieldInput,
-    fieldInputAutocomplete
+    fieldInputAutocomplete,
+    fieldInputAttach
   },
   data () {
     return {
@@ -270,7 +232,6 @@ export default {
           } else {
             setTimeout(() => {
               this.showLoader = false
-              console.log(data.data)
               this.$store.commit('setProfile', data.data)
               this.$store.commit('setSuccess', data)
             }, 600)
@@ -280,42 +241,6 @@ export default {
           throw e
         }
       }
-    },
-
-    async fileInputChange (obj) {
-      let file = obj.target.files[0]
-      if (!file) return false
-      // this.showLoader = true
-      let failName = file.name
-      let mas = failName.split('.')
-      let lastElem = mas.length - 1
-
-      if (!validEXT(mas[lastElem])) {
-        alert('Данный тип файла не поддерживается системой. Пожалуйста, выберите другой файл (pdf, jpeg, jpg, png).')
-        obj.target.value = ''
-        this.showLoader = false
-        return false
-      }
-
-      if (!validSize(file)) {
-        alert('Размер файла должен быть от 10 кб до 2 мб!')
-        obj.target.value = ''
-        this.showLoader = false
-        return false
-      }
-
-      this.attachments.push({
-        id: null,
-        name: 'Новый документ',
-        link: file.name,
-        new: {
-          is: true,
-          file
-        }
-      })
-    },
-    deleteAttach (id) {
-      this.attachments.splice(id, 1)
     }
   },
   watch: {
@@ -363,22 +288,6 @@ export default {
       this.attachments = getFilesFormatted(this.profile.edo_contracts)
     }
   }
-}
-
-// Проверка расширения файлов при добавлении
-function validEXT (ext) {
-  if (!ext) return false
-  let mas = ['pdf', 'jpeg', 'jpg', 'png']
-  for (let i = 0; i < mas.length; i++) {
-    if (mas[i] === ext) return true
-  }
-  return false
-}
-
-// Проверка размера добавляемого файла
-function validSize (obj) {
-  var osize = obj.size
-  return !((osize > 2 * 1024 * 1024) || (osize < 10 * 1024))
 }
 
 function getDataFiles (attachments) {
