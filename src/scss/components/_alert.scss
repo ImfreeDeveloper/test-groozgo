@@ -1,12 +1,19 @@
 .v-alert {
   position: fixed;
-  top: 5rem;
+  top: 10rem;
   right: 5rem;
   border-radius: .4rem;
   max-width: 40rem;
   padding: 1.5rem 2rem;
   font-size: 1.6rem;
   font-weight: 700;
+  z-index: 1001;
+  @include md-block() {
+    top: 7rem;
+    left: 2rem;
+    right: 2rem;
+    margin: auto;
+  }
   &.success {
     background-color: #4caf50;
     color: $color-white;

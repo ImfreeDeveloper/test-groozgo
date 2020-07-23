@@ -1,7 +1,7 @@
 <template>
   <div
       class="hamburger-menu"
-      :class="{'open': isOpen}"
+      :class="{'open': value}"
       @click="openHandler"
   >
     <label class="menu__btn">
@@ -12,15 +12,10 @@
 
 <script>
 export default {
-  data () {
-    return {
-      isOpen: false
-    }
-  },
+  props: ['value'],
   methods: {
     openHandler () {
-      this.isOpen = !this.isOpen
-      this.$emit('handlerOpen', this.isOpen)
+      this.$emit('input', !this.value)
     }
   }
 }

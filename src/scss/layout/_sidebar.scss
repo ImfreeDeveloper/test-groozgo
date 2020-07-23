@@ -1,7 +1,7 @@
 .sidebar {
   width: 23.5rem;
   flex-shrink: 0;
-  background-color: $color-base;
+  background-color:$color-base;
   @include md-block() {
     position: absolute;
     top: 0;
@@ -14,4 +14,47 @@
       transform: translateX(0);
     }
   }
+  ul {
+    li {
+      a {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        padding: 2rem;
+        color: $color-white;
+        opacity: .8;
+        transition: all .3s ease;
+        position: relative;
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          margin: auto;
+          height: 0;
+          border: 1.2rem solid transparent;
+          border-right: 1.2rem solid $color-white;
+          opacity: 0;
+        }
+        &:hover {
+          background: fade_out($color-white, .9)
+        }
+        i {
+          font-size: 2.1rem;
+          margin-right: 1rem;
+        }
+        &.active {
+          background-color: $color-secondary;
+          color: $color-base;
+          opacity: 1;
+          &:after {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
 }

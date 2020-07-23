@@ -2,7 +2,7 @@
   <div class="wrapper">
     <header>
       <hamburger
-        @handlerOpen="open"
+        v-model="open"
       />
       <div class="logo">
         <img src="/images/logo_theme_dark.png" alt="logo" />
@@ -19,7 +19,24 @@
       >
         {{ success.message }}
       </v-alert>
-      <div class="sidebar" :class="{'open': isOpen}"></div>
+      <div class="sidebar" :class="{'open': open}">
+        <ul>
+          <li>
+            <router-link tag="a" to="/profile" active-class="active" @click.native="open = false">
+              <i class="icon-user"></i>
+              Профиль
+            </router-link>
+            <router-link tag="a" to="/page1" active-class="active" @click.native="open = false">
+              <i class="icon-cog"></i>
+              Пункт меню 1
+            </router-link>
+            <router-link tag="a" to="/page2" active-class="active" @click.native="open = false">
+              <i class="icon-cog"></i>
+              Пункт меню 2
+            </router-link>
+          </li>
+        </ul>
+      </div>
       <div class="main-content">
         <slot />
       </div>
@@ -46,16 +63,13 @@ export default {
   },
   data () {
     return {
-      isOpen: false
+      open: false
     }
   },
   methods: {
     logout () {
       this.$store.dispatch('logout')
       this.$router.push('/login')
-    },
-    open (val) {
-      this.isOpen = val
     }
   },
   watch: {

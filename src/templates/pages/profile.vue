@@ -219,14 +219,12 @@ export default {
     validateField (vmfield) {
       this.$v[vmfield].$touch()
     },
-
     onSubmitAutocomplete (result) {
       this.nameBank = result.data.name.payment
       this.correspondentAccount = result.data.correspondent_account
       this.bik = result.data.bic
       this.isSelectedBik = true
     },
-
     async submitHandler () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
@@ -299,8 +297,14 @@ export default {
       this.attachments = getFilesFormatted(value.edo_contracts)
     }
   },
-  async created () {
-    await this.$store.dispatch('profile')
+  async mounted () {
+    if (!this.profile) {
+      this.showLoader = true
+      await this.$store.dispatch('profile')
+      setTimeout(() => {
+        this.showLoader = false
+      }, 600)
+    }
     if (this.profile) {
       this.countCars = this.profile.count_trucks
       this.nameBank = this.profile.bank_title
