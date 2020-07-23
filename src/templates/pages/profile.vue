@@ -81,7 +81,7 @@
                 v-model="bankAccount"
                 placeholder="Номер банковского счета"
                 :validError="$v.bankAccount.$error"
-                validErrorText="Значение «Номер банковского счета» должно содержать минимум 20 символов."
+                validErrorText="Неккоректный номер счета"
                 :serverError="serverErrors.bank_account"
                 @blur="validateField('bankAccount')"
                 :setMask="'####################'"
@@ -218,14 +218,10 @@ export default {
       required
     },
     nameBank: {
-      isSelected () {
-        return this.isSelectedBik
-      }
+      minLength: minLength(3)
     },
     correspondentAccount: {
-      isSelected () {
-        return this.isSelectedBik
-      }
+      minLength: minLength(20)
     },
     countCars: {
       required,
