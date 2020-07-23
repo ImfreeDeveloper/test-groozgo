@@ -101,7 +101,9 @@
                   hintLabel="Если оригинал не получен - значение «Нет»"
                 />
               </label>
-              <p class="wrp-field__static">Нет</p>
+              <p class="wrp-field__static">
+                {{ profile.edo_original ? 'Да': 'Нет' }}
+              </p>
             </div>
             <div class="wrp-field">
               <label>
@@ -110,7 +112,9 @@
                     hintLabel="Срок устанавливается при проверке скан-копии или оригинала Соглашения об электронном взаимодействии. До получения оригинала срок – 30 дней с даты проверки скан-копии"
                 />
               </label>
-              <p class="wrp-field__static">Нет</p>
+              <p class="wrp-field__static">
+                {{ profile.edo_date ? profile.edo_date: 'Нет' }}
+              </p>
             </div>
             <div class="wrp-field">
               <label>
@@ -119,7 +123,9 @@
                     hintLabel="Если вы отказались от подписания договоров и соглашений и/или не предоставили соглашение об электронном взаимодействии - значение «Не подписаны»"
                 />
               </label>
-              <p class="wrp-field__static">Не подписаны</p>
+              <p class="wrp-field__static">
+                {{ profile.edo_scan_checked ? 'Подписаны': 'Не подписаны' }}
+              </p>
             </div>
             <button type="submit" class="btn btn-secondary btn-secondary-hover-transparent">
               Сохранить

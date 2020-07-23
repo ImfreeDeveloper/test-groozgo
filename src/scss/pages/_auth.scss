@@ -2,6 +2,10 @@
   @include col();
   @include size(3.5);
   @include shift(4.25);
+  @include size-md(8);
+  @include shift-md(2);
+  @include size-sm(12);
+  @include shift-sm(0);
   text-align: center;
   margin-top: 10rem;
   h2 {

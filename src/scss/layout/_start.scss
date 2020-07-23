@@ -68,10 +68,14 @@ a, a:hover, a:focus, a:active {
   flex: 1 0 auto;
   background-color: $color-bg;
   &-with-sidebar {
+    margin-top: 9.6rem;
     display: flex;
     justify-content: space-between;
     background-color: $color-white!important;
     position: relative;
+    @include md-block() {
+      margin-top: 5rem;
+    }
   }
 }
 

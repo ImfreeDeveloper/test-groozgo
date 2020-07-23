@@ -1,10 +1,13 @@
 header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: $color-base;
   padding: 0 2rem;
-  position: relative;
   @include md-block() {
     height: 5rem;
   }
@@ -33,6 +36,8 @@ header {
     color: $color-white;
     opacity: .8;
     cursor: pointer;
+    position: relative;
+    z-index: 1001;
     @include md-block() {
       cursor: default;
       margin-left: auto;
