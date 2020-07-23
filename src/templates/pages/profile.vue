@@ -28,69 +28,69 @@
               @blur="validateField('countCars')"
             />
             <field-input
-                label="Почтовый адрес*"
-                v-model="postAddress"
-                placeholder="Почтовый адрес"
-                :validError="$v.postAddress.$error"
-                validErrorText="Необходимо заполнить «Почтовый адрес»."
-                :serverError="serverErrors.post_address"
-                @blur="validateField('postAddress')"
+              label="Почтовый адрес*"
+              v-model="postAddress"
+              placeholder="Почтовый адрес"
+              :validError="$v.postAddress.$error"
+              validErrorText="Необходимо заполнить «Почтовый адрес»."
+              :serverError="serverErrors.post_address"
+              @blur="validateField('postAddress')"
             />
             <field-input
-                label="Сайт компании"
-                v-model="site"
-                placeholder="Сайт компании"
-                :validError="$v.site.$error"
-                validErrorText="Значение «Сайт компании» не является правильным URL."
-                :serverError="serverErrors.site"
-                @blur="validateField('site')"
+              label="Сайт компании"
+              v-model="site"
+              placeholder="Сайт компании"
+              :validError="$v.site.$error"
+              validErrorText="Значение «Сайт компании» не является правильным URL."
+              :serverError="serverErrors.site"
+              @blur="validateField('site')"
             />
             <field-input-autocomplete
-                label="БИК"
-                placeholder="БИК"
-                :validError="$v.bik.$error"
-                validErrorText="Бик должен быть выбран из всплывающей подсказки."
-                :serverError="serverErrors.bik"
-                :setMask="'#########'"
-                @blur="validateField('bik')"
-                @submit="onSubmitAutocomplete"
-                v-model="bik"
+              label="БИК"
+              placeholder="БИК"
+              :validError="$v.bik.$error"
+              validErrorText="Бик должен быть выбран из всплывающей подсказки."
+              :serverError="serverErrors.bik"
+              :setMask="'#########'"
+              @blur="validateField('bik')"
+              @submit="onSubmitAutocomplete"
+              v-model="bik"
             />
             <field-input
-                label="Наименование Банка"
-                v-model="nameBank"
-                placeholder="Наименование Банка"
-                :validError="$v.nameBank.$error"
-                validErrorText="Необходимо заполнить «Наименование Банка»."
-                :serverError="serverErrors.bank_title"
-                @blur="validateField('nameBank')"
-                disabled
+              label="Наименование Банка"
+              v-model="nameBank"
+              placeholder="Наименование Банка"
+              :validError="$v.nameBank.$error"
+              validErrorText="Необходимо заполнить «Наименование Банка»."
+              :serverError="serverErrors.bank_title"
+              @blur="validateField('nameBank')"
+              disabled
             />
             <field-input
-                label="Корреспондентский счет"
-                v-model="correspondentAccount"
-                placeholder="Корреспондентский счет"
-                :validError="$v.correspondentAccount.$error"
-                validErrorText="Необходимо заполнить «Корреспондентский счет»."
-                :serverError="serverErrors.corr_account"
-                @blur="validateField('correspondentAccount')"
-                disabled
+              label="Корреспондентский счет"
+              v-model="correspondentAccount"
+              placeholder="Корреспондентский счет"
+              :validError="$v.correspondentAccount.$error"
+              validErrorText="Необходимо заполнить «Корреспондентский счет»."
+              :serverError="serverErrors.corr_account"
+              @blur="validateField('correspondentAccount')"
+              disabled
             />
             <field-input
-                label="Номер банковского счета"
-                v-model="bankAccount"
-                placeholder="Номер банковского счета"
-                :validError="$v.bankAccount.$error"
-                validErrorText="Неккоректный номер счета"
-                :serverError="serverErrors.bank_account"
-                @blur="validateField('bankAccount')"
-                :setMask="'####################'"
+              label="Номер банковского счета"
+              v-model="bankAccount"
+              placeholder="Номер банковского счета"
+              :validError="$v.bankAccount.$error"
+              validErrorText="Неккоректный номер счета"
+              :serverError="serverErrors.bank_account"
+              @blur="validateField('bankAccount')"
+              :setMask="'####################'"
             />
             <field-input-attach
-                label="Соглашение об электронном взаимодействии"
-                v-model="attachments"
-                :edoContractLink = profile.edo_contract_link
-                :serverError="serverErrors.edo_contracts"
+              label="Соглашение об электронном взаимодействии"
+              v-model="attachments"
+              :edoContractLink = profile.edo_contract_link
+              :serverError="serverErrors.edo_contracts"
             />
             <div class="wrp-field">
               <label>Получен оригинал соглашения об электронном взаимодействии</label>
