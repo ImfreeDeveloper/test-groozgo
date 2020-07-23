@@ -1,6 +1,12 @@
 <template>
   <div class="wrp-field">
-    <label :class="{'text-warning': serverError.length }">{{ label }}</label>
+    <label :class="{'text-warning': serverError.length }">
+      {{ label }}
+      <hint
+          v-if="hintLabel"
+          :hintLabel="hintLabel"
+      />
+    </label>
     <div class="wrp-field-files">
       <div class="file-items">
         <div class="file-wrap" v-for="(attachment, idx) in attachments" :key="idx">
@@ -44,13 +50,19 @@
 </template>
 
 <script>
+import hint from '../hint.vue'
+
 export default {
+  components: {
+    hint
+  },
   data () {
     return {
       attachments: []
     }
   },
   props: [
+    'hintLabel',
     'edoContractLink',
     'value',
     'serverError',

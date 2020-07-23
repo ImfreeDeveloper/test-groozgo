@@ -28,6 +28,7 @@
               @blur="validateField('countCars')"
             />
             <field-input
+              hintLabel="Пожалуйста, заполните почтовый адрес, и документы по перевозкам будут доставлены максимально быстро."
               label="Почтовый адрес*"
               v-model="postAddress"
               placeholder="Почтовый адрес"
@@ -87,21 +88,37 @@
               :setMask="'####################'"
             />
             <field-input-attach
+              hintLabel="Распечатайте указанный документ из приветственного письма или профиля, подпишите у уполномоченного лица вашей компании (лица, имеющего права действовать без доверенности от имени компании, либо лица, наделенного полномочиями по взаимодействию с GroozGo). Прикрепите документ в профиль или отправьте в ответе на приветственное письмо, направленное после регистрации. После этого ваша компания сможет совершать юридически значимые действия на сервисе GroozGo – заключать договоры, размещать и/или принимать к исполнению заказы на перевозку"
               label="Соглашение об электронном взаимодействии"
               v-model="attachments"
               :edoContractLink = profile.edo_contract_link
               :serverError="serverErrors.edo_contracts"
             />
             <div class="wrp-field">
-              <label>Получен оригинал соглашения об электронном взаимодействии</label>
+              <label>
+                Получен оригинал соглашения об электронном взаимодействии
+                <hint
+                  hintLabel="Если оригинал не получен - значение «Нет»"
+                />
+              </label>
               <p class="wrp-field__static">Нет</p>
             </div>
             <div class="wrp-field">
-              <label>Срок действия соглашения об электронном взаимодействии*</label>
+              <label>
+                Срок действия соглашения об электронном взаимодействии*
+                <hint
+                    hintLabel="Срок устанавливается при проверке скан-копии или оригинала Соглашения об электронном взаимодействии. До получения оригинала срок – 30 дней с даты проверки скан-копии"
+                />
+              </label>
               <p class="wrp-field__static">Нет</p>
             </div>
             <div class="wrp-field">
-              <label>Статус подписания документов ЭДО</label>
+              <label>
+                Статус подписания документов ЭДО
+                <hint
+                    hintLabel="Если вы отказались от подписания договоров и соглашений и/или не предоставили соглашение об электронном взаимодействии - значение «Не подписаны»"
+                />
+              </label>
               <p class="wrp-field__static">Не подписаны</p>
             </div>
             <button type="submit" class="btn btn-secondary btn-secondary-hover-transparent">
@@ -121,13 +138,15 @@ import loader from '../../components/loader.vue'
 import fieldInput from '../../components/inputs/field-input.vue'
 import fieldInputAutocomplete from '../../components/inputs/field-input-autocomplete.vue'
 import fieldInputAttach from '../../components/inputs/field-input-attach.vue'
+import hint from '../../components/hint.vue'
 
 export default {
   components: {
     loader,
     fieldInput,
     fieldInputAutocomplete,
-    fieldInputAttach
+    fieldInputAttach,
+    hint
   },
   data () {
     return {

@@ -1,6 +1,12 @@
 <template>
   <div class="wrp-field">
-    <label :class="{'text-warning': validError || serverError.length }">{{ label }}</label>
+    <label :class="{'text-warning': validError || serverError.length }">
+      {{ label }}
+      <hint
+        v-if="hintLabel"
+        :hintLabel="hintLabel"
+      />
+    </label>
     <input v-if="setMask"
         type="text"
         :placeholder="placeholder"
@@ -27,13 +33,14 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
+import hint from '../hint.vue'
 
-    }
+export default {
+  components: {
+    hint
   },
   props: [
+    'hintLabel',
     'disabled',
     'label',
     'value',

@@ -37,5 +37,15 @@
       transform: translateX(-50%) rotate(-45deg);
     }
   }
+  &.top {
+    &:after {
+      top: auto;
+      transform: translateY(50%) rotate(-135deg);
+    }
+  }
+  &_not_ws {
+    white-space: normal;
+    padding: 1rem;
+  }
 }
 

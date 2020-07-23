@@ -1,0 +1,20 @@
+.hint {
+  display: inline-block;
+  background-color: $color-secondary;
+  border-radius: 50%;
+  font-size: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  > span {
+    text-align: center;
+    display: block;
+  }
+  @include md-block() {
+    display: none;
+  }
+  .popover {
+    transform: translateX(-48%);
+    bottom: calc(100% + 1rem);
+  }
+}
